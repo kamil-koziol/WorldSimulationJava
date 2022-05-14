@@ -12,6 +12,9 @@ public class BarszczSosnowskiego extends Roslina {
 
     public static int KILLING_RANGE = 1;
 
+    public BarszczSosnowskiego() {
+        this(new Point(0,0));
+    }
     public BarszczSosnowskiego(Point position) {
         super(position, 10, Color.RED);
     }

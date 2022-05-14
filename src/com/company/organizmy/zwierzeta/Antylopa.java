@@ -8,6 +8,9 @@ import java.util.Random;
 
 public class Antylopa extends Zwierze implements IDodgeable {
 
+    public Antylopa() {
+        this(new Point(0,0));
+    }
     public Antylopa(Point position) {
         super(position, 4, 4, Color.CYAN);
         zasieg_ruchu = 2;

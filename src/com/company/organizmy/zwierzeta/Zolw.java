@@ -11,6 +11,7 @@ public class Zolw extends Zwierze implements IReflective {
     public static int MOVE_CHANCE = 25;
     public static int DEFEND_FROM_STRENGTH = 5;
 
+    public Zolw() {this(new Point(0,0));}
     public Zolw(Point position) {
         super(position, 2, 1, Color.blue);
     }

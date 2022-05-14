@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Lis extends Zwierze {
+    public Lis() {this(new Point(0,0));}
     public Lis(Point position) {
         super(position, 3, 7, Color.ORANGE);
     }

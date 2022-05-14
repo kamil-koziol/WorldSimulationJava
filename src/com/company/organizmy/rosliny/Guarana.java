@@ -10,6 +10,9 @@ public class Guarana extends Roslina {
 
     public static int STRENGTH_TO_ADD = 3;
 
+    public Guarana(){
+        this(new Point(0,0));
+    }
     public Guarana(Point position) {
         super(position, 0, Color.PINK);
     }

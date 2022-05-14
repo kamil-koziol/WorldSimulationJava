@@ -15,6 +15,9 @@ public class Czlowiek extends Zwierze implements IInvincible{
     public static int ABILITY_COOLDOWN = 5;
     public static int ABILITY_DURATION = 5;
 
+    public Czlowiek() {
+        this(new Point(0,0));
+    }
     public Czlowiek(Point position) {
         super(position, 5, 4, Color.black);
     }

@@ -3,6 +3,7 @@ package com.company.organizmy;
 import com.company.Swiat;
 
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 
 public abstract class Organizm {
@@ -129,5 +130,17 @@ public abstract class Organizm {
         int y = Integer.parseInt(parameters[3]);
         position.setLocation(new Point(x, y));
         sila = Integer.parseInt(parameters[4]);
+    }
+
+    public Organizm clone() {
+        try {
+            return (Organizm) this.getClass().getEnclosingConstructor().newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

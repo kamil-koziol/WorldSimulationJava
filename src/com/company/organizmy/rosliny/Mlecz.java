@@ -6,6 +6,9 @@ import com.company.organizmy.Organizm;
 import java.awt.*;
 
 public class Mlecz extends Roslina {
+    public Mlecz() {
+        this(new Point(0,0));
+    }
     public Mlecz(Point position) {
         super(position, 0, Color.YELLOW);
     }
