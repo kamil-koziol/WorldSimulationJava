@@ -14,11 +14,8 @@ public abstract class Zwierze extends Organizm {
         super(position, sila, inicjatywa, color);
     }
 
-    public abstract Organizm clone();
-
     @Override
     public void kolizja(Swiat swiat, Organizm other) {
-        System.out.println("KOLIZJA: " + this + " z " + other);
         if (other instanceof Zwierze zwierze) {
             if (this.getClass() == other.getClass()) {
                 if (canBreed() && zwierze.canBreed()) {
@@ -48,7 +45,7 @@ public abstract class Zwierze extends Organizm {
 
         if (p != null) {
             System.out.println("ROZMNAZANIE: " + this + " z " + zwierze);
-            Organizm organizm = this.clone();
+            Organizm organizm = this.getEmptyCopy();
             organizm.setPosition(p, swiat);
             swiat.dodajOrganizm(organizm);
         }
@@ -77,10 +74,12 @@ public abstract class Zwierze extends Organizm {
 
         if (getSila() == other.getSila()) {
             if (attacking) {
+                System.out.println(this + " zjada " + other);
                 swiat.usunOrganizm(other);
                 setPosition(other.getPosition(), swiat);
             }
         } else if (getSila() > other.getSila()) {
+            System.out.println(this + " zjada " + other);
             swiat.usunOrganizm(other);
             if (attacking) {
                 setPosition(other.getPosition(), swiat);

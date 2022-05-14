@@ -1,12 +1,13 @@
 package com.company.organizmy.zwierzeta;
 
 import com.company.Swiat;
-import com.company.organizmy.Organizm;
 import com.company.utils.Direction;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Czlowiek extends Zwierze implements IInvincible{
+public class Czlowiek extends Zwierze implements IInvincible {
 
     private Direction direction = Direction.RIGHT;
     private int abilityCooldown = 0;
@@ -20,11 +21,6 @@ public class Czlowiek extends Zwierze implements IInvincible{
     }
     public Czlowiek(Point position) {
         super(position, 5, 4, Color.black);
-    }
-
-    @Override
-    public Organizm clone() {
-        return new Czlowiek(getPosition());
     }
 
     @Override
@@ -111,15 +107,18 @@ public class Czlowiek extends Zwierze implements IInvincible{
     }
 
     @Override
-    public String toSaveFile() {
-        return super.toSaveFile() + " " + abilityCooldown + " " + abilityTurnsRemaining;
+    public ArrayList<String> getParameters() {
+        ArrayList<String> parameters = super.getParameters();
+        parameters.add(String.valueOf(abilityCooldown));
+        parameters.add(String.valueOf(abilityTurnsRemaining));
+        return parameters;
     }
 
-
     @Override
-    public void loadFromFileLine(String[] parameters) {
-        super.loadFromFileLine(parameters);
-        abilityCooldown = Integer.parseInt(parameters[5]);
-        abilityTurnsRemaining = Integer.parseInt(parameters[6]);
+    public void decodeFromString(String line, String delimeter) {
+        super.decodeFromString(line, delimeter);
+        String[] parameters = line.split(delimeter);
+        abilityCooldown = Integer.parseInt(parameters[parameters.length - 2]);
+        abilityTurnsRemaining = Integer.parseInt(parameters[parameters.length - 1]);
     }
 }

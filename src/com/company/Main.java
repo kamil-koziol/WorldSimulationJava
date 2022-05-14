@@ -66,9 +66,8 @@ public class Main extends JFrame {
 
         organismSelector = new JComboBox<>();
         organismSelector.setBounds(WORLD_MARGIN + newRoundButton.getX() + 180, newRoundButton.getY(), 200, 50);
-        for (Organizm organizm : swiat.getAllOrganismsTypes()) {
-            String name = organizm.getClass().getSimpleName();
-            organismSelector.addItem(name);
+        for(String organismName: swiat.getOrganizmRegister().getRegisteredNames()) {
+            organismSelector.addItem(organismName);
         }
 
         organismSelector.addActionListener(new ActionListener() {

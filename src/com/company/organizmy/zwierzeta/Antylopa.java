@@ -17,11 +17,6 @@ public class Antylopa extends Zwierze implements IDodgeable {
     }
 
     @Override
-    public Organizm clone() {
-        return new Antylopa(getPosition());
-    }
-
-    @Override
     public boolean dodges(Swiat swiat, Organizm other) {
         Random r = new Random();
         return r.nextInt(2) == 0;

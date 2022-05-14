@@ -24,9 +24,4 @@ public class Mlecz extends Roslina {
             super.akcja(swiat);
         }
     }
-
-    @Override
-    public Organizm clone() {
-        return new Mlecz(getPosition());
-    }
 }

@@ -35,9 +35,4 @@ public class Lis extends Zwierze {
             moveTo(swiat, p);
         }
     }
-
-    @Override
-    public Organizm clone() {
-        return new Lis(getPosition());
-    }
 }

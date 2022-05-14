@@ -27,12 +27,10 @@ public abstract class Roslina extends Organizm {
     public void seeding(Swiat swiat) {
         Point point = swiat.getRandomFreePointAround(getPosition(), 1);
         if (point != null) {
-            System.out.println("ZASIANO: " + this + " do " + point);
-            Organizm organizm = this.clone();
+            System.out.println("ZASIANO: " + this + " do Punkt{" + point.x + ", " + point.y + "}");
+            Organizm organizm = this.getEmptyCopy();
             organizm.setPosition(point, swiat);
             swiat.dodajOrganizm(organizm);
         }
     }
-
-    public abstract Organizm clone();
 }

@@ -39,9 +39,4 @@ public class BarszczSosnowskiego extends Roslina {
             swiat.usunOrganizm(zwierze);
         }
     }
-
-    @Override
-    public Organizm clone() {
-        return new BarszczSosnowskiego(getPosition());
-    }
 }

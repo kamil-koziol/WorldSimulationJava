@@ -21,9 +21,4 @@ public class WilczeJagody extends Roslina {
             swiat.usunOrganizm(zwierze);
         }
     }
-
-    @Override
-    public Organizm clone() {
-        return new WilczeJagody(getPosition());
-    }
 }

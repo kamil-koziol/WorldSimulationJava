@@ -26,11 +26,6 @@ public class Zolw extends Zwierze implements IReflective {
     }
 
     @Override
-    public Organizm clone() {
-        return new Zolw(getPosition());
-    }
-
-    @Override
     public boolean reflects(Swiat swiat, Organizm other) {
         return other.getSila() < DEFEND_FROM_STRENGTH;
     }

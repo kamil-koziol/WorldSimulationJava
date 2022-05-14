@@ -3,6 +3,7 @@ package com.company;
 import com.company.organizmy.Organizm;
 import com.company.organizmy.rosliny.*;
 import com.company.organizmy.zwierzeta.*;
+import com.company.utils.ObjectRegister;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +26,30 @@ public class Swiat extends JPanel {
     private int organismsAdded = 0;
     private ArrayList<Organizm> organizmy = new ArrayList<Organizm>();
 
+    public ObjectRegister<Organizm> getOrganizmRegister() {
+        return organizmRegister;
+    }
+
+    private ObjectRegister<Organizm> organizmRegister;
+
     public Swiat(Dimension dimensions, int scale) {
         this.dimensions = dimensions;
         this.scale = scale;
         board = new Organizm[dimensions.height][dimensions.width];
+
+        organizmRegister = new ObjectRegister<>();
+        organizmRegister.add(BarszczSosnowskiego.class);
+        organizmRegister.add(Guarana.class);
+        organizmRegister.add(Mlecz.class);
+        organizmRegister.add(Trawa.class);
+        organizmRegister.add(WilczeJagody.class);
+
+        organizmRegister.add(Antylopa.class);
+        organizmRegister.add(Lis.class);
+        organizmRegister.add(Owca.class);
+        organizmRegister.add(Wilk.class);
+        organizmRegister.add(Zolw.class);
+        organizmRegister.add(Czlowiek.class);
     }
 
     @Override
@@ -68,9 +89,11 @@ public class Swiat extends JPanel {
         }
     }
 
-    ;
 
     public void dodajOrganizm(Organizm organizm) {
+        if(!organizmRegister.checkClass(organizm.getClass())) {
+            return;
+        }
         organizm.setId(organismsAdded);
         organismsAdded++;
         organizmy.add(organizm);
@@ -84,7 +107,6 @@ public class Swiat extends JPanel {
             }
         }
         organizm.setDead(true);
-        System.out.println("USUNIETO: " + organizm);
         updateBoard();
     }
 
@@ -189,29 +211,17 @@ public class Swiat extends JPanel {
         return organizmArrayList;
     }
 
-    public Organizm getOrganizmFromName(String name) {
-        for (Organizm organizm : getAllOrganismsTypes()) {
-            String n = organizm.getClass().getSimpleName();
-            if(name.equals(n)) {
-                return organizm.clone();
-            }
-        }
-
-        return null;
-    }
-
     public void generateRandomWorld() {
-        ArrayList<Organizm> organizmArrayList = getAllOrganismsTypes();
 
         Random r = new Random();
-        for (Organizm organizm : organizmArrayList) {
+        for (Organizm organizm : organizmRegister.getInstancesOfAllClasses()) {
             int amountOfAnimalsToAdd = r.nextInt(10);
             for (int i = 0; i < amountOfAnimalsToAdd; i++) {
                 if (organizm instanceof BarszczSosnowskiego) {
                     break;
                 }
                 Point randomPoint = getRandomFreePointAround(new Point(r.nextInt(dimensions.width), r.nextInt(dimensions.height)), dimensions.width + dimensions.height);
-                Organizm o = organizm.clone();
+                Organizm o = organizm.getEmptyCopy();
                 o.setPosition(randomPoint, this);
                 dodajOrganizm(o);
                 if (organizm instanceof Czlowiek) {
@@ -239,10 +249,10 @@ public class Swiat extends JPanel {
         }
         if (getOrganismAt(translated) == null) {
             if (!selectedOrganizm.equals("")) {
-                Organizm o = getOrganizmFromName(selectedOrganizm);
-                o.setPosition(translated, this);
-                dodajOrganizm(o);
-                o.rysowanie(this, getGraphics());
+                Organizm organizm = organizmRegister.getInstanceOfName(selectedOrganizm);
+                organizm.setPosition(translated, this);
+                dodajOrganizm(organizm);
+                organizm.rysowanie(this, getGraphics());
             }
         }
     }
@@ -264,10 +274,6 @@ public class Swiat extends JPanel {
         return new Point(translatedX, translatedY);
     }
 
-    public void initialDraw() {
-        rysujSwiat(getGraphics());
-    }
-
     public void makeSave(String fileName) {
         fileName += ".save";
         Path p = Paths.get(".", "saves", fileName);
@@ -277,7 +283,7 @@ public class Swiat extends JPanel {
             fileWriter.write("Pola:\n");
             fileWriter.write("Nazwa ogarnizmu / Dlugość Życia / Punkt X / Punkt Y / Siła\n");
             for(Organizm organizm: organizmy) {
-                fileWriter.write(organizm.toSaveFile() + "\n");
+                fileWriter.write(organizm.encodeToString(" ") + "\n");
             }
             fileWriter.close();
         } catch (IOException e) {
@@ -298,9 +304,9 @@ public class Swiat extends JPanel {
             while(reader.hasNextLine()) {
                 String line = reader.nextLine();
                 String[] parameters = line.split(" ");
-                Organizm o = getOrganizmFromName(parameters[0]);
-                o.loadFromFileLine(parameters);
-                dodajOrganizm(o);
+                Organizm organizm = organizmRegister.getInstanceOfName(parameters[0]);
+                organizm.decodeFromString(line, " ");
+                dodajOrganizm(organizm);
 
             }
 

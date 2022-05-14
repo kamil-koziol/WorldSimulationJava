@@ -23,9 +23,4 @@ public class Guarana extends Roslina {
             zwierze.setSila(zwierze.getSila() + STRENGTH_TO_ADD);
         }
     }
-
-    @Override
-    public Organizm clone() {
-        return new Guarana(getPosition());
-    }
 }

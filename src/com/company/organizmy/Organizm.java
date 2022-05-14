@@ -4,9 +4,11 @@ import com.company.Swiat;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 
-public abstract class Organizm {
+public abstract class Organizm implements Encodable{
     private int lifetime = 0;
     private Point position;
     private int sila;
@@ -57,7 +59,6 @@ public abstract class Organizm {
     }
 
     public void setPosition(Point position, Swiat swiat) {
-        System.out.println("RUCH: " + this + " do " + position);
         this.position = position;
         swiat.updateBoard();
     }
@@ -90,16 +91,8 @@ public abstract class Organizm {
     public String toString() {
         return
                 this.getClass().getSimpleName() + "{" +
-                        "lifetime=" + lifetime +
-                        ", position=" + position +
-                        ", sila=" + sila +
-                        ", id=" + id +
+                        "id=" + id +
                         '}';
-    }
-
-    public String toSaveFile() {
-        String save = getClass().getSimpleName() + " " + lifetime + " " + position.x + " " + position.y + " " + sila;
-        return save;
     }
 
     public boolean hasDoneTurn() {
@@ -110,7 +103,34 @@ public abstract class Organizm {
         this.doneTurn = doneTurn;
     }
 
-    public abstract Organizm clone();
+    @Override
+    public ArrayList<String> getParameters() {
+        ArrayList<String> parameters = new ArrayList<String>(
+                Arrays.asList(getClass().getSimpleName(),
+                        String.valueOf(lifetime),
+                        String.valueOf(position.x),
+                        String.valueOf(position.y),
+                        String.valueOf(sila)
+                )
+        );
+        return parameters;
+    }
+
+    @Override
+    public String encodeToString(String delimeter) {
+        return String.join(delimeter, getParameters());
+    }
+
+    @Override
+    public void decodeFromString(String line, String delimeter) {
+        String[] parameters = line.split(delimeter);
+        String name = parameters[0];
+        lifetime = Integer.parseInt(parameters[1]);
+        int x = Integer.parseInt(parameters[2]);
+        int y = Integer.parseInt(parameters[3]);
+        position.setLocation(new Point(x, y));
+        sila = Integer.parseInt(parameters[4]);
+    }
 
     public static class OrganizmComparator implements Comparator<Organizm> {
         @Override
@@ -123,24 +143,14 @@ public abstract class Organizm {
         }
     }
 
-    public void loadFromFileLine(String[] parameters) {
-        String name = parameters[0];
-        lifetime = Integer.parseInt(parameters[1]);
-        int x = Integer.parseInt(parameters[2]);
-        int y = Integer.parseInt(parameters[3]);
-        position.setLocation(new Point(x, y));
-        sila = Integer.parseInt(parameters[4]);
-    }
-
-    public Organizm clone() {
+    public Organizm getEmptyCopy() {
         try {
-            return (Organizm) this.getClass().getEnclosingConstructor().newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+            Organizm organizm = (Organizm) this.getClass().getConstructor().newInstance();
+            return organizm;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 }

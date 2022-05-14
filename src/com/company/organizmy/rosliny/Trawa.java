@@ -16,9 +16,4 @@ public class Trawa extends Roslina {
     @Override
     public void kolizja(Swiat swiat, Organizm other) {
     }
-
-    @Override
-    public Organizm clone() {
-        return new Trawa(getPosition());
-    }
 }
